@@ -23,9 +23,9 @@ python main.py
 
 Доступны 4 переменные:
  - `DVMN_TOKEN`= Ваш токен на курсе, можно найти в личном кабинете, после регистрации
- - `TIMEOUT`= Количество секунд до таймаута по long polling, перед отправкой нового сообщения.
+ - `DVMN_API_TIMEOUT`= Количество секунд до таймаута по long polling, перед отправкой нового сообщения.
  - `TELEGRAM_BOT_TOKEN`= Токен вашего телеграм бота (можно узнать у [@BotFather](https://t.me/botfather))
- - `CHAT_ID`= Ваш ID в телеграм (ID можно узнать у [@userinfobot](https://t.me/userinfobot))
+ - `TG_CHAT_ID`= Ваш ID в телеграм (ID можно узнать у [@userinfobot](https://t.me/userinfobot))
 
 
 ## Цели проекта
