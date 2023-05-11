@@ -8,6 +8,18 @@ import telegram
 from dotenv import load_dotenv
 
 
+class MyLogsHandler(logging.Handler):
+    def __init__(self, tg_chat_id, telegram_token):
+        super().__init__()
+        self.chat_id = tg_chat_id
+        self.token = telegram_token
+
+    def emit(self, record):
+        log_entry = self.format(record)
+        bot = telegram.Bot(token=self.token)
+        bot.send_message(chat_id=self.chat_id, text=textwrap.dedent(log_entry))
+
+
 def get_last_attempt(dvmn_token, dvmn_api_timeout, timestamp):
     logging.warning("Getting the last attempts...")
     url = 'https://dvmn.org/api/long_polling/'
@@ -51,13 +63,9 @@ def send_telegram_message(telegram_token, tg_chat_id, last_attempt):
         bot.send_message(chat_id=tg_chat_id, text=textwrap.dedent(text))
 
 
-if __name__ == '__main__':
-    load_dotenv()
-    dvmn_token = os.getenv('DVMN_TOKEN')
-    dvmn_api_timeout = int(os.getenv('DVMN_API_TIMEOUT'))
-    telegram_token = os.getenv('TELEGRAM_BOT_TOKEN')
-    tg_chat_id = os.getenv('TG_CHAT_ID')
+def main(dvmn_token, dvmn_api_timeout, telegram_token, tg_chat_id):
     timestamp = get_last_timestamp(dvmn_token)
+    logger.warning("Bot started...")
     while True:
         try:
             last_attempt = get_last_attempt(dvmn_token, dvmn_api_timeout, timestamp)
@@ -71,3 +79,24 @@ if __name__ == '__main__':
         except requests.exceptions.ConnectionError:
             logging.warning("It's seems you have some connection issues...\nTrying to reconnect...")
             time.sleep(10)
+
+
+if __name__ == '__main__':
+    load_dotenv()
+    dvmn_token = os.getenv('DVMN_TOKEN')
+    dvmn_api_timeout = int(os.getenv('DVMN_API_TIMEOUT'))
+    telegram_token = os.getenv('TELEGRAM_BOT_TOKEN')
+    tg_chat_id = os.getenv('TG_CHAT_ID')
+
+    logging.basicConfig(format="%(asctime)s %(levelname)s %(message)s",
+                        datefmt="%Y-%m-%d %H:%M:%S")
+    logger = logging.getLogger('MyLogsHandler')
+    logger.setLevel(logging.WARNING)
+    logger.addHandler(MyLogsHandler(tg_chat_id, telegram_token))
+
+    try:
+        main(dvmn_token, dvmn_api_timeout, telegram_token, tg_chat_id)
+    except Exception as err:
+        logger.error('Bot stopped working with an error...')
+        logger.exception(err)
+
