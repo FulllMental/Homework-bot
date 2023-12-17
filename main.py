@@ -78,7 +78,7 @@ if __name__ == '__main__':
     logger.addHandler(LogsHandler(tg_chat_id, telegram_token))
 
     timestamp = get_last_timestamp(dvmn_token)
-    logger.warning("Bot started....")
+    logger.warning("Bot started...")
     while True:
         try:
             last_attempt = get_last_attempt(dvmn_token, dvmn_api_timeout, timestamp)
