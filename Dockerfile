@@ -1,11 +1,9 @@
-FROM python:3.10
+FROM python:3.10-bookworm
 
 WORKDIR /opt
 
-COPY requirements.txt .
+RUN --mount=type=bind,source=requirements.txt,target=requirements.txt pip install -r requirements.txt
 
-RUN pip install -r requirements.txt
-
-COPY . /opt
+COPY main.py /opt
 
 CMD ["python", "main.py"]

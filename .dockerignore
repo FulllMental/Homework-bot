@@ -1,0 +1,39 @@
+# Игнорировать системные файлы и директории
+.git
+.gitignore
+.dockerignore
+.docker/
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+
+# Игнорировать виртуальные окружения
+env/
+.venv/
+venv/
+
+# Игнорировать артефакты сборки и пакеты
+build/
+dist/
+*.egg-info/
+*.egg
+
+# Игнорировать временные файлы и кэш
+*.log
+*.tmp
+pip-log.txt
+pip-delete-this-directory.txt
+.cache/
+htmlcov/
+.tox/
+.coverage
+
+# Игнорировать конфигурационные файлы и секреты
+.env
+*.env
+*.ini
+
+# Игнорировать документацию и тесты
+docs/_build/
+tests/
